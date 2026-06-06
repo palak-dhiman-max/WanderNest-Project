@@ -126,9 +126,7 @@ module.exports.filter = async (req, res) => {
 module.exports.newRoute = (req, res) => {
     res.render("new.ejs");
 }
-
 module.exports.createRoute = async (req, res) => {
-
     let url = req.file.path;
     let filename = req.file.filename;
 
@@ -152,27 +150,40 @@ module.exports.createRoute = async (req, res) => {
     new1.owner = req.user._id;
 
     try {
+        const query = `${location}, ${country}`;
+
         const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
+            `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`,
             {
                 headers: {
-                    "User-Agent": "Wanderlust Project"
+                    "User-Agent": "Wanderlust Project (palakdhimanjj@gmail.com)",
+                    "Accept": "application/json"
                 }
             }
         );
 
-        const data = await response.json();   // ✅ FIXED
+        const contentType = response.headers.get("content-type");
 
-        if (data && data.length > 0) {
-            const lat = parseFloat(data[0].lat);
-            const lon = parseFloat(data[0].lon);
+        if (!response.ok || !contentType?.includes("application/json")) {
+            const text = await response.text();
+            console.log(
+                "Geo API non-json response:",
+                response.status,
+                text.slice(0, 200)
+            );
+        } else {
+            const data = await response.json();
 
-            new1.geometry = {
-                type: "Point",
-                coordinates: [lon, lat]
-            };
+            if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lon = parseFloat(data[0].lon);
+
+                new1.geometry = {
+                    type: "Point",
+                    coordinates: [lon, lat]
+                };
+            }
         }
-
     } catch (err) {
         console.log("Geo API failed:", err.message);
     }
