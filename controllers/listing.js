@@ -127,74 +127,128 @@ module.exports.newRoute = (req, res) => {
     res.render("new.ejs");
 }
 
-
-//create route
 module.exports.createRoute = async (req, res) => {
-
-
 
     let url = req.file.path;
     let filename = req.file.filename;
-    //for validation checking every field which is required should be enetred else got error
+
     let result = listingschema.validate(req.body);
     if (result.error) {
         throw new errorhandler(404, result.error);
     }
 
+    let { title, description, category, price, country, location } = req.body;
 
-    let { title, description, image,category,price, country,location } = req.body;
-    const new1 = await Listing({
-        title: title,
-        description: description,
-        image: { filename: filename, url: url },
-        category:category,
-        price: price,
-        country: country,
-        location: location,
-        
+    const new1 = new Listing({
+        title,
+        description,
+        image: { filename, url },
+        category,
+        price,
+        country,
+        location
     });
 
     new1.owner = req.user._id;
 
-    const location1 = req.body.location;
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
+            {
+                headers: {
+                    "User-Agent": "Wanderlust Project"
+                }
+            }
+        );
 
-const response = await fetch(
-  `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location1)}&format=json&limit=1`,
-  {
-    headers: {
-      "User-Agent": "Wanderlust Project"
+        const data = await response.json();   // ✅ FIXED
+
+        if (data && data.length > 0) {
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+
+            new1.geometry = {
+                type: "Point",
+                coordinates: [lon, lat]
+            };
+        }
+
+    } catch (err) {
+        console.log("Geo API failed:", err.message);
     }
-  }
-);
-
-// const data = await response.json();
-
-console.log("Status:", response.status);
-
-const text = await response.text();
-console.log("Response:", text);
-
-
-if (data.length > 0) {
-  const lat = parseFloat(data[0].lat);
-  const lon = parseFloat(data[0].lon);
-
-
-  new1.geometry = {
-    type: "Point",
-    coordinates: [lon, lat]
-};
-
-
- 
-}
 
     await new1.save();
 
-    //flash succesfull msg
     req.flash("success", "Successfully Added Listing");
     res.redirect("/listings");
-}
+};
+//create route
+// module.exports.createRoute = async (req, res) => {
+
+
+
+//     let url = req.file.path;
+//     let filename = req.file.filename;
+//     //for validation checking every field which is required should be enetred else got error
+//     let result = listingschema.validate(req.body);
+//     if (result.error) {
+//         throw new errorhandler(404, result.error);
+//     }
+
+
+//     let { title, description, image,category,price, country,location } = req.body;
+//     const new1 = await Listing({
+//         title: title,
+//         description: description,
+//         image: { filename: filename, url: url },
+//         category:category,
+//         price: price,
+//         country: country,
+//         location: location,
+        
+//     });
+
+//     new1.owner = req.user._id;
+
+//     const location1 = req.body.location;
+
+// const response = await fetch(
+//   `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location1)}&format=json&limit=1`,
+//   {
+//     headers: {
+//       "User-Agent": "Wanderlust Project"
+//     }
+//   }
+// );
+
+// // const data = await response.json();
+
+// console.log("Status:", response.status);
+
+// const text = await response.text();
+// console.log("Response:", text);
+
+
+// if (data.length > 0) {
+//   const lat = parseFloat(data[0].lat);
+//   const lon = parseFloat(data[0].lon);
+
+
+//   new1.geometry = {
+//     type: "Point",
+//     coordinates: [lon, lat]
+// };
+
+
+ 
+// }
+
+//     await new1.save();
+
+//     //flash succesfull msg
+//     req.flash("success", "Successfully Added Listing");
+//     res.redirect("/listings");
+// }
 
 //show route
 
