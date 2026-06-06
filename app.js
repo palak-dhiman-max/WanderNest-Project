@@ -74,7 +74,7 @@ const session = require("express-session");
 
 //mongo store
 const  {MongoStore} = require('connect-mongo');
-console.log(MongoStore);
+
 //requiring flash
 const flash = require("connect-flash");
 

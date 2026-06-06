@@ -91,7 +91,6 @@ module.exports.filter1 = async (req, res) => {
    
 
    let result = await Listing.find(filter);
-  
 
        if(result.length==0){
         req.flash("error","No Listings Found!");
