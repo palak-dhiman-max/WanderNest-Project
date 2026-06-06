@@ -167,7 +167,13 @@ const response = await fetch(
   }
 );
 
-const data = await response.json();
+// const data = await response.json();
+
+console.log("Status:", response.status);
+
+const text = await response.text();
+console.log("Response:", text);
+
 
 if (data.length > 0) {
   const lat = parseFloat(data[0].lat);

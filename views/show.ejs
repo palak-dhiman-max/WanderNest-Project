@@ -165,25 +165,37 @@
   </div>
 </div>
 
-
-
-<% if(list.geometry && list.geometry.coordinates){ %>
+<!-- <% if(list && list.geometry && list.geometry.coordinates && list.geometry.coordinates.length === 2){ %>
 <script>
     const coords = <%- JSON.stringify(list.geometry.coordinates) %>;
 
     const map = L.map('map').setView([coords[1], coords[0]], 13);
 
-    L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        {
-            attribution: '&copy; OpenStreetMap contributors & CARTO',
-            maxZoom: 20
-        }
-    ).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors & CARTO',
+        maxZoom: 20
+    }).addTo(map);
 
     L.marker([coords[1], coords[0]])
         .addTo(map)
-        .bindPopup("<%= list.title %>")
-        .openPopup();
+        .bindPopup("<%= list.title %>");
+</script>
+<% } %> -->
+
+<% if(list?.geometry?.coordinates?.length === 2){ %>
+<script>
+window.addEventListener("load", () => {
+    const coords = <%- JSON.stringify(list.geometry.coordinates) %>;
+
+    const map = L.map('map').setView([coords[1], coords[0]], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    L.marker([coords[1], coords[0]])
+        .addTo(map)
+        .bindPopup("<%= list.title %>");
+});
 </script>
 <% } %>
