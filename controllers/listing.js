@@ -193,73 +193,8 @@ module.exports.createRoute = async (req, res) => {
     req.flash("success", "Successfully Added Listing");
     res.redirect("/listings");
 };
-//create route
-// module.exports.createRoute = async (req, res) => {
 
 
-
-//     let url = req.file.path;
-//     let filename = req.file.filename;
-//     //for validation checking every field which is required should be enetred else got error
-//     let result = listingschema.validate(req.body);
-//     if (result.error) {
-//         throw new errorhandler(404, result.error);
-//     }
-
-
-//     let { title, description, image,category,price, country,location } = req.body;
-//     const new1 = await Listing({
-//         title: title,
-//         description: description,
-//         image: { filename: filename, url: url },
-//         category:category,
-//         price: price,
-//         country: country,
-//         location: location,
-        
-//     });
-
-//     new1.owner = req.user._id;
-
-//     const location1 = req.body.location;
-
-// const response = await fetch(
-//   `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location1)}&format=json&limit=1`,
-//   {
-//     headers: {
-//       "User-Agent": "Wanderlust Project"
-//     }
-//   }
-// );
-
-// // const data = await response.json();
-
-// console.log("Status:", response.status);
-
-// const text = await response.text();
-// console.log("Response:", text);
-
-
-// if (data.length > 0) {
-//   const lat = parseFloat(data[0].lat);
-//   const lon = parseFloat(data[0].lon);
-
-
-//   new1.geometry = {
-//     type: "Point",
-//     coordinates: [lon, lat]
-// };
-
-
- 
-// }
-
-//     await new1.save();
-
-//     //flash succesfull msg
-//     req.flash("success", "Successfully Added Listing");
-//     res.redirect("/listings");
-// }
 
 //show route
 
@@ -304,10 +239,10 @@ module.exports.editRoute = async (req, res) => {
     res.render("edit.ejs", { list ,originalImgUrl});
 
 }
+  
 
-//update
+//update route
 module.exports.updateRoute = async (req, res) => {
-
     let { id } = req.params;
 
     let result = listingschema.validate(req.body);
@@ -315,52 +250,64 @@ module.exports.updateRoute = async (req, res) => {
         throw new errorhandler(400, result.error);
     }
 
-    let { title, description,category, price, country, location,} = req.body;
-
-    // Get coordinates from location
-    const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
-        {
-            headers: {
-                "User-Agent": "Wanderlust Project"
-            }
-        }
-    );
-
-    const data = await response.json();
+    let { title, description, category, price, country, location } = req.body;
 
     let geometry = undefined;
 
-    if (data.length > 0) {
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
+    try {
+        const query = `${location}, ${country}`;
 
-        geometry = {
-            type: "Point",
-            coordinates: [lon, lat]
-        };
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`,
+            {
+                headers: {
+                    "User-Agent": "Wanderlust Project (palakdhimanjj@gmail.com)",
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        const contentType = response.headers.get("content-type");
+
+        if (!response.ok || !contentType?.includes("application/json")) {
+            const text = await response.text();
+            console.log(
+                "Geo API non-json response:",
+                response.status,
+                text.slice(0, 200)
+            );
+        } else {
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                const lat = parseFloat(data[0].lat);
+                const lon = parseFloat(data[0].lon);
+
+                geometry = {
+                    type: "Point",
+                    coordinates: [lon, lat]
+                };
+            }
+        }
+    } catch (err) {
+        console.log("Geo API failed:", err.message);
     }
 
-    //  update object prepare 
     let updateData = {
         title,
         description,
         category,
         price,
         country,
-        location,
-      
+        location
     };
 
-    // add geometry only if found
     if (geometry) {
         updateData.geometry = geometry;
     }
 
-    //  update listing
     let listing = await Listing.findByIdAndUpdate(id, updateData, { new: true });
 
-    //  image update
     if (req.file) {
         listing.image = {
             filename: req.file.filename,
@@ -372,8 +319,6 @@ module.exports.updateRoute = async (req, res) => {
     req.flash("success", "Successfully Updated Listing");
     res.redirect(`/listings/${id}`);
 };
-
-
 
 //delete route
 
