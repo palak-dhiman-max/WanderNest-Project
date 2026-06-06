@@ -56,7 +56,7 @@ console.log(q);
 //filter route
 module.exports.filter1 = async (req, res) => {
 
-   let {minPrice ,maxPrice,country , location , property, aminities,rating} = req.body;
+   let {minPrice ,maxPrice,country , location , category,rating} = req.body;
 
    let filter={};
 
@@ -78,20 +78,18 @@ module.exports.filter1 = async (req, res) => {
     filter.location = location
    }
 
-   if(property){
-    filter.category=property
-   }
+  
 
-   if(aminities){
-    filter.aminities ={
-        $in:Array.isArray(aminities)?aminities:[aminities]
+   if(category){
+    filter.category ={
+        $in:Array.isArray(category)?category:[category]
     }
    }
 
    
 
    let result = await Listing.find(filter);
-
+ 
        if(result.length==0){
         req.flash("error","No Listings Found!");
         return res.redirect("/listings");
