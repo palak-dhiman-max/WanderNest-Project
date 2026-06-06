@@ -1,0 +1,741 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+
+.filters::-webkit-scrollbar{
+    display: none;
+}
+
+.filters{
+    white-space: nowrap;
+    scrollbar-width: none;
+   
+}
+
+
+.filters div{
+    min-width: 80px;
+    cursor: pointer;
+     
+}
+
+.filters i{
+    font-size: 1.3rem;
+}
+
+.filter-wrapper{
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgb(196, 189, 189);
+    margin-bottom: 1.5rem;
+   
+    
+}
+
+
+
+#filters{
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 50rem;
+   
+  
+}
+
+#filters::-webkit-scrollbar{
+    display: none;
+}
+
+.filter{
+    border-bottom: 2px solid transparent;
+    min-width: 80px;
+    flex-shrink: 0;
+    margin-top: 1rem;
+    opacity: 0.7;
+    cursor: pointer;
+   
+   
+}
+
+.filter:hover{
+   opacity: 1;
+   border-bottom: 2px solid grey;
+}
+
+.scroll-btn{
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 10;
+    
+}
+
+
+
+.filter-btn{
+   margin-left: 1rem;
+   display: flex !important;
+   justify-content: center;
+   align-items: center;
+   
+}
+
+.filter-btn:hover{
+    background-color: rgb(195, 195, 195);
+
+}
+
+.card-text .tax ,.tax1{
+    display: none;
+}
+
+/* FILTER MODAL */
+
+.filter-section-title{
+    
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.filter-chip{
+    font-size: 0.95rem;
+   
+    
+    border-radius: 1rem;
+    min-height: 44px;
+}
+
+.filter-chip i{
+    font-size: 0.9rem;
+}
+
+.price-box{
+    padding: 0.8rem 1rem;
+}
+
+.price-box small{
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.price-box h4{
+    font-size: 1rem;
+    margin: 0;
+}
+
+.modal-content{
+    border-radius: 2rem;
+}
+
+.modal-footer{
+    padding: 1.25rem 2rem;
+}
+
+.show-btn{
+    padding: 0.3rem ;
+    border-radius: 0.8rem;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+.modal-content{
+    height: 90vh;
+}
+
+.modal-body{
+    overflow-y: auto;
+}
+
+.modal-body{
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.modal-body::-webkit-scrollbar{
+    display: none;
+}
+
+.noUi-connect{
+    background-color: black;
+}
+
+.noUi-handle {
+    background: #ff385c;
+    border: 2px solid #ff385c;
+    border-radius: 100%;
+    box-shadow: none;
+}
+.price-title ,.country-title,.guest-title,.property-title,.aminities-title ,.location-title{
+    font-size: 1.2rem;
+}
+
+
+.btn-check:checked + .filter-chip{
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+</style>
+<body>
+
+
+<div class="filter-wrapper">
+
+  <button class="scroll-btn left" onclick="scrollLeftBtn()">
+    <i class="fa-solid fa-chevron-left"></i>
+</button>
+
+    <div id="filters" class="d-flex flex-nowrap overflow-auto gap-4 py-2">
+
+      
+      
+         <div class="filter text-center">
+        <a href="/listings/filter/Trending" class="text-decoration-none text-dark"> <div><i class="fa-solid fa-fire"></i></div>
+         <p>Trending</p>   </a>
+      </div>
+
+         <div class="filter text-center">
+         <a href="/listings/filter/Rooms" class="text-decoration-none text-dark"> 
+              <div><i class="fa-solid fa-bed"></i></div>
+         <p>Rooms</p> </a>
+      </div>
+
+
+      
+            <div class="filter text-center">
+
+                <a href="/listings/filter/Cities" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-city"></i></div>
+         <p>Iconic cities</p> </a>
+      </div>
+
+
+     
+
+            <div class="filter text-center">
+     <a href="/listings/filter/Mountains" class="text-decoration-none text-dark">  
+          <div><i class="fa-solid fa-mountain"></i></div>
+         <p>Mountains</p> </a>
+      </div>
+
+
+
+            <div class="filter text-center">
+     <a href="/listings/filter/Castles" class="text-decoration-none text-dark">    <div><i class="fa-brands fa-fort-awesome"></i></div>
+         <p>Castles</p> </a>
+      </div>
+
+
+
+            <div class="filter text-center">
+                <a href="/listings/filter/Pools" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-person-swimming"></i></div>
+         <p>Amazing Pools</p> </a>
+      </div>
+
+
+
+                  <div class="filter text-center">
+                    <a href="/listings/filter/Camping" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-campground"></i></div>
+         <p>Camping</p> </a>
+      </div>
+
+              
+
+      <div class="filter text-center">
+              <a href="/listings/filter/Farms" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-cow"></i></div>
+         <p>Farms</p> </a>
+      </div>
+
+              
+     
+      <div class="filter text-center">
+         <a href="/listings/filter/Arctic" class="text-decoration-none text-dark">
+                     <div><i class="fa-regular fa-snowflake"></i></div>
+         <p>Arctic</p> </a>
+      
+   </div> 
+
+
+
+                     <div class="filter text-center">
+                        <a href="/listings/filter/Dome" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-landmark-dome"></i></div>
+         <p>Dome</p> </a>
+      
+   </div> 
+
+                     <div class="filter text-center">
+
+                           <a href="/listings/filter/Beach" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-umbrella-beach"></i></div>
+         <p>Beach</p> </a>
+      
+   </div> 
+
+
+                     <div class="filter text-center">
+
+                           <a href="/listings/filter/Boats" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-sailboat"></i></div>
+         <p>Boats</p> </a>
+      
+   </div> 
+
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/Villa" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-mountain-city me-2"></i></div>
+         <p>Villa</p> </a>
+      
+   </div> 
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/Apartment" class="text-decoration-none text-dark">
+         <div>  <i class="fa-solid fa-building me-2"></i></div>
+         <p>Apartment</p> </a>
+      
+   </div> 
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/House" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-house me-2"></i></div>
+         <p>House</p> </a>
+      
+   </div> 
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/AC" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-fan"></i></div>
+         <p>AC</p> </a>
+      
+   </div> 
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/Gym" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-dumbbell"></i></div>
+         <p>Gym</p> </a>
+      
+   </div> 
+
+                       <div class="filter text-center">
+
+                           <a href="/listings/filter/Parking" class="text-decoration-none text-dark">
+         <div><i class="fa-solid fa-square-parking"></i></div>
+         <p>Parking</p> </a>
+      
+   </div> 
+
+ 
+
+
+</div>
+
+  
+    <button class="scroll-btn right" onclick="scrollRightBtn()">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+
+
+    <button class=" filter-btn btn border rounded-pill px-3 py-2  me-0"   data-bs-toggle="modal" 
+  data-bs-target="#filterModal">
+        <i class="fa-solid fa-sliders me-2" ></i>
+        <span>Filter</span>
+    </button>
+
+
+<div class="tax-toggle d-none d-md-flex align-items-center gap-2 ms-5">
+    <label class="form-check-label mb-0" for="switchCheckDefault">
+        Display total after taxes
+    </label>
+
+    <div class="form-check form-switch mb-0">
+        <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="switchCheckDefault"
+        >
+    </div>
+</div>
+ 
+</div>
+
+
+
+<div class="tax-toggle d-flex d-md-none align-items-center justify-content-center gap-2 mb-3">
+    <label class="form-check-label mb-0" for="switchCheckMobile">
+        Display total after taxes
+    </label>
+
+    <div class="form-check form-switch mb-0">
+        <input class="form-check-input" role="switch" type="checkbox" id="switchCheckMobile">
+    </div>
+</div>
+  
+
+   
+
+
+   <div class="row row-cols-lg-3 row row-cols-md-2 row row-cols-sm-1 listing-link">
+
+
+   <% for(let list of result){ %>
+
+      <a href="/listings/<%= list._id %>">
+      <div class="card card1 col "  >
+  <img src="<%= list.image.url %>" class="card-img-top" alt="listing_image"  style="height: 18rem;" >
+
+  <div class="card-img-overlay"></div>
+  <div class="card-body">
+    
+    <p class="card-text">
+     <b> <%= list.title %> </b>  <br>
+
+    <span class="tax2">  &#8377; <%= list.price %>/night  </span>
+
+      <span class="tax1"> &#8377; <%= list.price +(list.price *0.18) %>/night &nbsp; 18% /gst </span>
+   
+   </p>
+   
+  </div>
+</div>
+
+   </a>
+
+   <% } %>
+
+   </div>
+
+
+
+
+
+
+   <div class="modal fade" id="filterModal" tabindex="-1">
+  <!-- <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable"> -->
+    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h4 class="modal-title fw-bold ">Filters</h4>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+<form action="/listings/filter" method="post">
+
+  <!-- PRICE RANGE -->
+  <div class="mb-3">
+    <h4 class=" mb-2 ms-2 mt-1 price-title">Price range (per night)</h4>
+
+
+
+    <div id="price-slider"></div>
+    <input type="hidden" name="minPrice" id="minPriceInput">
+<input type="hidden" name="maxPrice" id="maxPriceInput">
+
+<div class="row mt-3">
+  <div class="col">
+    <div class="border rounded-3 p-2">
+      <small>MINIMUM</small>
+      <h4 id="minPrice" >2000</h4>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="border rounded-3 p-2">
+      <small>MAXIMUM</small>
+      <h4 id="maxPrice">200000</h4>
+    </div>
+  </div>
+</div>
+
+  </div> 
+
+  <!-- COUNTRY -->
+
+  <div class="mb-3 ">
+    <h4 class="  mb-2  country-title">Country</h4>
+
+<div class="d-flex flex-wrap gap-2">
+
+    <input type="radio" class="btn-check" name="country" value="India" id="india">
+    <label class="btn btn-outline-secondary filter-chip" for="india">🇮🇳 India</label>
+
+    <input type="radio" class="btn-check"  name="country" value="France" id="france">
+    <label class="btn btn-outline-secondary filter-chip" for="france">🇫🇷 France</label>
+
+    <input type="radio" class="btn-check" name="country" value="Japan" id="japan">
+    <label class="btn btn-outline-secondary filter-chip" for="japan">🇯🇵 Japan</label>
+
+    <input type="radio" class="btn-check" name="country" value="USA" id="usa">
+    <label class="btn btn-outline-secondary filter-chip" for="usa">🇺🇸 USA</label>
+
+    <input type="radio" class="btn-check" name="country" value="Italy" id="italy">
+    <label class="btn btn-outline-secondary filter-chip" for="italy">🇮🇹 Italy</label>
+
+</div>
+  </div>
+
+  <!-- LOCATION -->
+
+  <div class="mb-3">
+    <h4 class=" mt-1 mb-2 fs-0.1 location-title">Location</h4>
+
+    <input
+      type="text"
+      class="form-control form-control-lg rounded-2"
+      placeholder="e.g. Mumbai, Paris, Bali..."
+      name="location" >
+      
+  </div>
+
+  <!-- PROPERTY TYPE -->
+
+
+
+<div class="mb-3">
+<h4 class=" mb-2 property-title">Property</h4>
+   <div class="d-flex flex-wrap gap-2">
+
+    <input type="radio" class="btn-check" name="property" value="House" id="house">
+    <label class="btn btn-outline-secondary filter-chip" for="house">
+        <i class="fa-solid fa-house me-2"></i>House
+    </label>
+
+    <input type="radio" class="btn-check" name="property" value="Apartment" id="apartment">
+    <label class="btn btn-outline-secondary filter-chip" for="apartment">
+        <i class="fa-solid fa-building me-2"></i>Apartment
+    </label>
+
+    <input type="radio" class="btn-check" name="property" value="Villa" id="villa">
+    <label class="btn btn-outline-secondary filter-chip" for="villa">
+        <i class="fa-solid fa-mountain-city me-2"></i>Villa
+    </label>
+
+    <input type="radio" class="btn-check" name="property" value="Rooms" id="hotel">
+    <label class="btn btn-outline-secondary filter-chip" for="hotel">
+        <i class="fa-solid fa-hotel me-2"></i>Hotel
+    </label>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+ <h4 class="mb-2  aminities-title">Amenities</h4>
+
+
+<div class="d-flex flex-wrap gap-2">
+
+    <input type="checkbox" name="aminities" value="Wifi"  class="btn-check" id="wifi">
+    <label class="btn btn-outline-secondary filter-chip" for="wifi">
+        <i class="fa-solid fa-wifi me-2"></i>Wifi
+    </label>
+
+    <input type="checkbox"  name="aminities" value="Pool" class="btn-check" id="pool">
+    <label class="btn btn-outline-secondary filter-chip" for="pool">
+        <i class="fa-solid fa-water-ladder me-2"></i>Pool
+    </label>
+
+    <input type="checkbox" name="aminities" value="AC"  class="btn-check" id="ac">
+    <label class="btn btn-outline-secondary filter-chip" for="ac">
+        <i class="fa-solid fa-fan me-2"></i>AC
+    </label>
+
+    <input type="checkbox" name="aminities" value="Parking"  class="btn-check" id="parking">
+    <label class="btn btn-outline-secondary filter-chip" for="parking">
+        <i class="fa-solid fa-car me-2"></i>Parking
+    </label>
+
+    <input type="checkbox" name="aminities" value="Gym"  class="btn-check" id="gym">
+    <label class="btn btn-outline-secondary filter-chip" for="gym">
+        <i class="fa-solid fa-dumbbell me-2"></i>Gym
+    </label>
+
+</div>
+
+
+</div>
+
+
+<div class="mb-3">
+<h4 class="mb-2 guest-title ">Guest rating</h4>
+
+<div class="d-flex flex-wrap gap-2">
+
+    <input type="radio" class="btn-check" value="3"  name="rating" id="r3">
+    <label class="btn btn-outline-secondary filter-chip" for="r3">
+        3+ <i class="fa-solid fa-star ms-1"></i>
+    </label>
+
+    <input type="radio" class="btn-check" value="3"  name="rating" id="r35">
+    <label class="btn btn-outline-secondary filter-chip" for="r35">
+        3.5+ <i class="fa-solid fa-star ms-1"></i>
+    </label>
+
+    <input type="radio" class="btn-check"  value="4" name="rating" id="r4">
+    <label class="btn btn-outline-secondary filter-chip" for="r4">
+        4+ <i class="fa-solid fa-star ms-1"></i>
+    </label>
+
+    <input type="radio" class="btn-check" value="5"  name="rating" id="r45">
+    <label class="btn btn-outline-secondary filter-chip" for="r45">
+        4.5+ <i class="fa-solid fa-star ms-1"></i>
+    </label>
+
+</div>
+</div>
+
+
+<div class="modal-footer justify-content-between">
+
+    <a href="/listings" class="text-dark fs-0.5">
+        Clear all
+    </a>
+
+    <button type="submit" class="btn btn-dark show-btn">
+        Show results
+    </button>
+
+</div>
+
+</form>
+
+</div>
+
+
+
+
+</div>
+
+
+    </div>
+  </div>
+
+
+</body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.8.1/dist/nouislider.min.js"></script>
+
+<script>
+   const filters = document.getElementById("filters");
+
+function scrollLeftBtn() {
+    filters.scrollBy({
+        left: -250,
+        behavior: "smooth"
+    });
+}
+
+function scrollRightBtn() {
+    filters.scrollBy({
+        left: 250,
+        behavior: "smooth"
+    });
+}
+
+
+
+
+let taxtoggle = document.getElementById('switchCheckDefault');
+
+let taxtoggle1 = document.getElementById('switchCheckMobile');
+taxtoggle.addEventListener('click', () => {
+
+    let tax1 = document.getElementsByClassName('tax1');
+    let tax2 = document.getElementsByClassName('tax2');
+
+    for (let i = 0; i < tax1.length; i++) {
+
+        if (tax1[i].style.display !== "inline") {
+            tax1[i].style.display = "inline";
+            tax2[i].style.display = "none";
+        } else {
+            tax1[i].style.display = "none";
+            tax2[i].style.display = "inline";
+        }
+
+    }
+});
+
+taxtoggle1.addEventListener('click', () => {
+
+    let tax1 = document.getElementsByClassName('tax1');
+    let tax2 = document.getElementsByClassName('tax2');
+
+    for (let i = 0; i < tax1.length; i++) {
+
+        if (tax1[i].style.display !== "inline") {
+            tax1[i].style.display = "inline";
+            tax2[i].style.display = "none";
+        } else {
+            tax1[i].style.display = "none";
+            tax2[i].style.display = "inline";
+        }
+
+    }
+});
+
+const slider = document.getElementById('price-slider');
+
+noUiSlider.create(slider, {
+    start: [2000, 200000],
+    connect: true,
+    range: {
+        min: 1000,
+        max: 200000
+    }
+});
+
+const minPrice = document.getElementById("minPrice");
+const maxPrice = document.getElementById("maxPrice");
+
+slider.noUiSlider.on('update', function(values) {
+    minPrice.textContent = Math.round(values[0]);
+    maxPrice.textContent = Math.round(values[1]);
+});
+
+
+const minPriceInput = document.getElementById("minPriceInput");
+const maxPriceInput = document.getElementById("maxPriceInput");
+
+slider.noUiSlider.on('update', function(values) {
+
+    const min = Math.round(values[0]);
+    const max = Math.round(values[1]);
+
+    minPrice.textContent = min;
+    maxPrice.textContent = max;
+
+    minPriceInput.value = min;
+    maxPriceInput.value = max;
+});
+
+</script>

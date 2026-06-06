@@ -1,0 +1,153 @@
+
+    <% layout("/layouts/boilerplate") %>
+
+<div class="row">
+
+    <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 mt-4 mb-3">
+        <h3>Create your listing</h3>
+
+        <form method="post" action="/listings/create" class="needs-validation" novalidate enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+
+                <input
+                    name="title"
+                    placeholder="Add a catchy title"
+                    type="text"
+                    class="form-control"
+                    required
+                >
+
+                <div class="invalid-feedback">
+                    Please enter title
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+
+                <textarea
+                    name="description"
+                    class="form-control"
+                    required
+                ></textarea>
+
+                <div class="invalid-feedback">
+                    Please enter description.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Image</label>
+
+                <input
+                    name="image"
+                    placeholder="Enter URL/LINK"
+                    type="file"
+                    class="form-control"
+                    required
+                >
+            </div>
+
+            <!-- category -->
+            
+
+
+            <div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+
+    <select
+        class="form-select"
+        id="category"
+        name="category"
+        required
+    >
+        <option selected disabled value="">
+            Choose a category
+        </option>
+
+        <option value="Trending">Trending</option>
+        <option value="Rooms">Rooms</option>
+        <option value="Cities">Iconic Cities</option>
+        <option value="Mountains">Mountains</option>
+        <option value="Castles">Castles</option>
+        <option value="Pools">Amazing Pools</option>
+        <option value="Camping">Camping</option>
+        <option value="Farms">Farms</option>
+        <option value="Arctic">Arctic</option>
+        <option value="Domes">Domes</option>
+        <option value="Boats">Boats</option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+        <option value="Villa">Villa</option>
+        <option value="Parking">Parking</option>
+        <option value="AC">AC</option>
+        <option value="Gym">Gym</option>
+    </select>
+</div>
+
+
+
+
+
+
+
+
+
+            <div class="row">
+
+                <div class="col-12 col-md-4 mb-3">
+                    <label for="price" class="form-label">Price</label>
+
+                    <input
+                        name="price"
+                        placeholder="1200"
+                        class="form-control"
+                        required
+                    >
+
+                    <div class="invalid-feedback">
+                        Please enter price.
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-8 mb-3">
+                    <label for="country" class="form-label">Country</label>
+
+                    <input
+                        name="country"
+                        placeholder="India"
+                        type="text"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+
+                <input
+                    name="location"
+                    placeholder="Jaipur, Rajasthan"
+                    type="text"
+                    class="form-control"
+                    required
+                >
+
+                <div class="invalid-feedback">
+                    Please enter location.
+                </div>
+            </div>
+
+            <button class="btn btn1 btn-dark " type="submit">
+                Add
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,189 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+
+  <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 mt-4 mb-1">
+    <h3><b><%= list.title %></b></h3>
+  </div>
+
+  <div class="card card1 col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+
+    <div class="card-body">
+
+      <img 
+        src="<%= list.image.url %>" 
+        class="card-img-top show-img" 
+        alt="listing_image"
+      >
+
+      <p class="card-text mt-3"> <%= list.description %> </p>
+           <p class="card-text mt-3"> Owned By <i> <%= list.owner.username %></i></p>
+           <p class="card-text mt-3">  &#8377; <%= list.price.toLocaleString("en-IN") %></p>
+               <p class="card-text mt-3"><%= list.location %> </p>
+                   <p class="card-text mt-3">   <%= list.country %></p>
+    
+     
+
+      
+              <%  if( current && current._id.equals(list.owner._id))   { %>
+
+                
+      <div class="btns d-flex flex-wrap gap-2">
+        <a href="/listings/<%= list._id %>/edit" class="show-edit btn btn1 btn-dark">
+          Edit
+        </a>
+
+        <form method="post" action="/listings/<%= list._id %>?_method=DELETE">
+          <button class="btn btn-dark btn-delete" type="submit">
+            Delete
+          </button>
+        </form>
+      </div>
+
+                <% } %>
+
+    </div>
+
+  </div>
+
+  <!-- form for review -->
+
+  <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+
+    <hr>
+
+    <h4>Leave a review</h4>
+  <% if(current)  { %>
+    <form 
+      action="/listings/<%=list._id%>/reviews"  
+      method="post" 
+      class="needs-validation"  
+      novalidate
+    >
+
+      
+      <div class="mt-3">
+
+        <label for="rating" class="form-label" >Rating</label>
+      <fieldset class="starability-slot">
+
+  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+  <input type="radio" id="first-rate1" name="rating" value="1" />
+  <label for="first-rate1" title="Terrible">1 star</label>
+  <input type="radio" id="first-rate2" name="rating" value="2" />
+  <label for="first-rate2" title="Not good">2 stars</label>
+  <input type="radio" id="first-rate3" name="rating" value="3" />
+  <label for="first-rate3" title="Average">3 stars</label>
+  <input type="radio" id="first-rate4" name="rating" value="4" />
+  <label for="first-rate4" title="Very good">4 stars</label>
+  <input type="radio" id="first-rate5" name="rating" value="5" />
+  <label for="first-rate5" title="Amazing">5 stars</label>
+</fieldset>
+</div>
+      <div class="mt-3">
+
+        <label class="form-label" for="comment">Comment</label>
+
+        <textarea 
+          class="form-control" 
+          name="comment" 
+          id="comment" 
+          rows="4" 
+          cols="30" 
+          required
+        ></textarea>
+
+        <div class="invalid-feedback">
+          Please add a comment.
+        </div>
+
+      </div>
+
+      <button class="btn btn-outline-dark mt-3">
+        Submit
+      </button>
+  
+    </form>
+
+  
+   
+
+     <% } %>
+
+
+     <% if(list.review.length){ %>
+     <hr/>
+        <p><b>All Reviews</b></p>
+
+    <div class="row">
+
+      <% for ( let result of list.review) { %>
+
+      <div class="card col-12 col-md-3 ms-md-3 mb-3 ">
+
+        <div class="card-body">
+
+          <h6 class="card-subtitle mt-2 mb-2 text-body-secondary">
+           @<%= result.author.username %>
+          </h6>
+
+          <p class="starability-result" data-rating="<%= result.rating %>">
+              
+              </p>
+
+          <p class="card-text">
+            <%= result.comment %>
+          </p>
+
+          <form 
+            class="mb-2" 
+            method="post" 
+            action="/listings/<%=list._id%>/reviews/<%=result._id%>?_method=DELETE"
+          >
+
+            <button class="btn btn-dark" type="submit">
+              Delete
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <% } %>
+
+    </div>
+<% } %>
+
+  </div>
+
+  <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 mt-3" >
+    <h3>Where you will be</h3>
+    <div id="map"></div>
+  </div>
+</div>
+
+
+
+<% if(list.geometry && list.geometry.coordinates){ %>
+<script>
+    const coords = <%- JSON.stringify(list.geometry.coordinates) %>;
+
+    const map = L.map('map').setView([coords[1], coords[0]], 13);
+
+    L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        {
+            attribution: '&copy; OpenStreetMap contributors & CARTO',
+            maxZoom: 20
+        }
+    ).addTo(map);
+
+    L.marker([coords[1], coords[0]])
+        .addTo(map)
+        .bindPopup("<%= list.title %>")
+        .openPopup();
+</script>
+<% } %>
